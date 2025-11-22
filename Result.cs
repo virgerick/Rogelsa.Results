@@ -66,10 +66,45 @@ public  class  Result<TValue>
     /// </summary>
     /// <param name="onSuccess">The action to execute with the success value.</param>
     /// <returns>The current result instance to allow method chaining.</returns>
+    /// <summary>
+    /// Executes the specified action if the result represents a success.
+    /// </summary>
+    /// <param name="onSuccess">The action to execute with the success value.</param>
+    /// <returns>The current result instance to allow method chaining.</returns>
     public Result<TValue> OnSuccess(Action<Success<TValue>> onSuccess)
     {
         if (_isSuccess){
             onSuccess.Invoke(_success!);
+        } 
+            
+        return this;
+    }
+
+    /// <summary>
+    /// Binds the result to a new result using the specified function if the current result is a success.
+    /// </summary>
+    /// <typeparam name="TNewValue">The type of the value in the new result.</typeparam>
+    /// <param name="binder">The function that produces a new result based on the current success value.</param>
+    /// <returns>
+    /// The result of the binder function if the current result is a success;
+    /// otherwise, the original error.
+    /// </returns>
+    /// <remarks>
+    /// This method is used to chain operations that might fail. If the current result is a success,
+    /// the binder function is called with the success value. If the current result is an error,
+    /// the error is propagated without calling the binder function.
+    /// </remarks>
+    public Result<TNewValue> Bind<TNewValue>(Func<Success<TValue>, Result<TNewValue>> binder)
+    {
+        return _isSuccess 
+            ? binder(_success!)
+            : new Result<TNewValue>(_error!);
+    }
+    } 
+    public async Task<Result<TValue>> OnSuccessAsync(Func<Success<TValue>,Task> onSuccess)
+    {
+        if (_isSuccess){
+          await  onSuccess.Invoke(_success!);
         } 
             
         return this;
@@ -88,6 +123,14 @@ public  class  Result<TValue>
         }
         return this;
     }
+ public async Task<Result<TValue>> OnFailureAsync(Func<Error,Task> onFailure)
+    {
+        if (!_isSuccess) 
+        {
+           await onFailure.Invoke(_error!);
+        }
+        return this;
+    }
 
     /// <summary>
     /// Executes one of the provided functions based on whether the result is a success or failure.
@@ -100,6 +143,11 @@ public  class  Result<TValue>
     {
         return _isSuccess ? onSuccess.Invoke(_success!) : onFailure.Invoke(_error!);
     }
+    public Task<TResult> SwitchAsync<TResult>(Func<Success<TValue>,Task<TResult>> onSuccess, Func<Error, Task<TResult>> onFailure)
+    {
+        return _isSuccess ? onSuccess.Invoke(_success!) : onFailure.Invoke(_error!);
+    }
+
     /// <summary>
     /// Transforms the success value using the specified mapping function if the result is a success.
     /// </summary>
@@ -109,13 +157,10 @@ public  class  Result<TValue>
     /// A new <see cref="Result{TNewValue}"/> with the transformed value if the operation was successful;
     /// otherwise, returns the original error.
     /// </returns>
-    public Result<TNewValue> Map<TNewValue>(Func<Success<TValue>, Success<TNewValue>> onMap)
-    {
-        return _isSuccess 
-            ? onMap.Invoke(_success!)
-            : _error!;
-    }
-    
+    public Result<TNewValue> Map<TNewValue>(Func<Success<TValue>, Success<TNewValue>> onMap) => _isSuccess  ? onMap.Invoke(_success!) : _error!;
+
+    public async Task<Result<TNewValue>> MapAsync<TNewValue>(Func<Success<TValue>, Task<Success<TNewValue>>> onMap) => _isSuccess ? await onMap.Invoke(_success!): _error!;
+
     /// <summary>
     /// Implicitly converts a <see cref="Success{TValue}"/> to a <see cref="Result{TValue}"/>.
     /// </summary>
@@ -136,31 +181,37 @@ public  class  Result<TValue>
 /// Represents the result of an operation that doesn't return a value but can still fail with an <see cref="Error"/>.
 /// This is a non-generic version of <see cref="Result{TValue}"/> where the success case doesn't carry any value.
 /// </summary>
-public  class  Result : Result<None>
+public class Result : Result<None>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> class with a success value.
     /// </summary>
     /// <param name="success">The success value representing a successful operation with no return value.</param>
-    private Result(Success<None> success) : base(success) { }
+    private Result(Success<None> success) : base(success)
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> class with an error value.
     /// </summary>
     /// <param name="error">The error that caused the operation to fail.</param>
-    private Result(Error error) : base(error) { }
+    private Result(Error error) : base(error)
+    {
+    }
+
     /// <summary>
     /// Creates a new successful result with no value.
     /// </summary>
     /// <param name="success">The success value representing a successful operation with no return value.</param>
     /// <returns>A new <see cref="Result"/> representing a successful operation.</returns>
     public new static Result Success(Success<None> success) => new Result(success);
-    
+
     /// <summary>
     /// Creates a new failed result with the specified error.
     /// </summary>
     /// <param name="error">The error that caused the operation to fail.</param>
     /// <returns>A new <see cref="Result"/> representing a failed operation.</returns>
     public new static Result Failure(Error error) => new Result(error);
-    
-    
+
+
 }
