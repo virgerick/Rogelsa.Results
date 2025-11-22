@@ -1,6 +1,6 @@
 using Rogelsa.Results.Succeed;
 
-namespace Rogelsa.Results;
+namespace Rogelsa.Results.Extensions;
 
 /// <summary>
 /// Provides extension methods for creating successful <see cref="Result"/> and <see cref="Result{TValue}"/> instances.
@@ -39,7 +39,7 @@ public static class ResultSuccessExtensions
         /// <returns>A successful <see cref="Result"/> with a NoContent status.</returns>
         public static Result NoContent()
         {
-            return Result.Success(new NoContent<None>());
+            return Result.Success(Success.NoContent());
         }
 
 /// <summary>
@@ -55,9 +55,9 @@ public static class ResultSuccessExtensions
         /// providing a value. Consider using the non-generic <see cref="NoContent()"/> if you 
         /// don't need to return a value.
         /// </remarks>
-        public static Result<T> NoContent<T>(T value)
+        public static Result<T> NoContent<T>()
         {
-            return Result<T>.Success(Success.Ok(value));
+            return Result<T>.Success(Success.NoContent<T>());
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ public static class ResultSuccessExtensions
         /// <returns>A successful <see cref="Result"/> with a Created status.</returns>
         public static Result Created(Resource? resource = null)
         {
-            return Result.Success(new Created(resource));
+            return Result.Success(Success.Created(resource));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ public static class ResultSuccessExtensions
         /// <returns>A successful <see cref="Result{T}"/> containing the created resource with a Created status.</returns>
         public static Result<T> Created<T>(T value)
         {
-            return Result<T>.Success(Success.Ok(value));
+            return Result<T>.Success(Success.Created(value));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ public static class ResultSuccessExtensions
         /// <returns>A successful <see cref="Result"/> indicating a successful deletion.</returns>
         public static Result Deleted(Resource? resource = null)
         {
-            return Result.Success(new Deleted<None>(resource));
+            return Result.Success(Success.Deleted(resource));
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ public static class ResultSuccessExtensions
         /// This method creates an OK result rather than a NoContent result because it returns a value.
         /// If you don't need to return a value, consider using the non-generic <see cref="Deleted(Resource?)"/> method.
         /// </remarks>
-        public static Result<T> Deleted<T>(T value)
+        public static Result<T> Deleted<T>(Resource? resource = null)
         {
-            return Result<T>.Success(Success.Ok(value));
+            return Result<T>.Success(Success.Deleted<T>(resource));
         }
     }
 }

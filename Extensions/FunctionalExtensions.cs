@@ -1,6 +1,6 @@
 namespace Rogelsa.Results.Extensions;
 
-public class FunctionalExtensions
+public static class FunctionalExtensions
 {
     
 }

@@ -1,6 +1,6 @@
 using Rogelsa.Results.Failures;
 
-namespace Rogelsa.Results;
+namespace Rogelsa.Results.Extensions;
 
 /// <summary>
 /// Provides extension methods for creating failed <see cref="Result"/> and <see cref="Result{TValue}"/> instances.
