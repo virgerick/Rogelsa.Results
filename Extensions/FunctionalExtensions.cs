@@ -39,15 +39,7 @@ public static class FunctionalExtensions
 
     #region Match - Handle both success and error cases
 
-    /// <summary>
-    /// Handles both success and error cases by applying the appropriate function.
-    /// </summary>
-    /// <typeparam name="T">The type of the result's success value.</typeparam>
-    /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <param name="result">The result to match on.</param>
-    /// <param name="onSuccess">The function to call if the result is successful.</param>
-    /// <param name="onError">The function to call if the result is an error.</param>
-    /// <returns>The result of applying the appropriate function.</returns>
+
     /// <summary>
     /// Handles both success and error cases by applying the appropriate function.
     /// </summary>
@@ -140,16 +132,7 @@ public static class FunctionalExtensions
         Func<Error, Result<T>> handler)
         => result.Switch(_ => result, handler);
 
-    /// <summary>
-    /// Asynchronously handles errors by applying the specified handler function if the result is an error.
-    /// </summary>
-    /// <typeparam name="T">The type of the result's success value.</typeparam>
-    /// <param name="resultTask">A task that represents the asynchronous operation to get the result to handle errors for.</param>
-    /// <param name="handler">The asynchronous function that handles the error and returns a new result.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the result after error handling.</returns>
-    /// <summary>
-    /// Asynchronously handles errors by applying the specified handler function if the result is an error.
-    /// </summary>
+    
     /// <typeparam name="T">The type of the result's success value.</typeparam>
     /// <param name="resultTask">A task that represents the asynchronous operation to get the result to handle errors for.</param>
     /// <param name="handler">The asynchronous function that handles the error and returns a new result.</param>
@@ -172,14 +155,7 @@ public static class FunctionalExtensions
 
     #region Filter - Apply a predicate to the success value
 
-    /// <summary>
-    /// Filters the success value using the specified predicate.
-    /// </summary>
-    /// <typeparam name="T">The type of the result's success value.</typeparam>
-    /// <param name="result">The result to filter.</param>
-    /// <param name="predicate">The predicate to apply to the success value.</param>
-    /// <param name="error">The error to return if the predicate returns false.</param>
-    /// <returns>The original result if the predicate returns true; otherwise, the specified error.</returns>
+   
     /// <summary>
     /// Filters the success value using the specified predicate.
     /// </summary>
@@ -237,7 +213,13 @@ public static class FunctionalExtensions
     /// <returns>A <see cref="ValueTask{Result{T}}"/> that represents the asynchronous operation.</returns>
     public static ValueTask<Result<T>> AsValueTask<T>(this Task<Result<T>> task)
         => new ValueTask<Result<T>>(task);
-
+    /// <summary>
+    /// Converts a <see cref="Result{T}"/> to a <see cref="ValueTask{Result{T}}"/>.
+    /// </summary>
+    /// <param name="result"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static ValueTask<Result<T>> AsValueTask<T>(this Result<T> result)=>ValueTask.FromResult(result);
     /// <summary>
     /// Converts a <see cref="Result{T}"/> to a completed <see cref="Task{Result{T}}"/>.
     /// </summary>

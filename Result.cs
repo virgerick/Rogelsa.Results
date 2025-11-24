@@ -100,7 +100,7 @@ public  class  Result<TValue>
             ? binder(_success!)
             : new Result<TNewValue>(_error!);
     }
-    } 
+    
     public async Task<Result<TValue>> OnSuccessAsync(Func<Success<TValue>,Task> onSuccess)
     {
         if (_isSuccess){
