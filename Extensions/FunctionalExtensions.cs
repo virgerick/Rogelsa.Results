@@ -1,7 +1,5 @@
 using Rogelsa.Results.Failures;
 using Rogelsa.Results.Succeed;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Rogelsa.Results.Extensions;
 
 /// <summary>
