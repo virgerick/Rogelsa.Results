@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Rogelsa.Results.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Rogelsa.Results.IntegrationTests/Rogelsa.Results.IntegrationTests.csproj" />
+    <Project Path="tests/Rogelsa.Results.UnitTests/Rogelsa.Results.UnitTests.csproj" />
+  </Folder>
+</Solution>
