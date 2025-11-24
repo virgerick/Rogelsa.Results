@@ -10,7 +10,6 @@ namespace Rogelsa.Results.Extensions;
 public static class FunctionalExtensions
 {
 
-    #region Bind - Chain operations that return Results
 
     /// <summary>
     /// Asynchronously chains a result-returning function to a result.
@@ -35,9 +34,7 @@ public static class FunctionalExtensions
         ).ConfigureAwait(false);
     }
 
-    #endregion
-
-    #region Match - Handle both success and error cases
+    
 
 
     /// <summary>
@@ -76,10 +73,7 @@ public static class FunctionalExtensions
         return await result.SwitchAsync(onSuccess,onError).ConfigureAwait(false);
     }
 
-    #endregion
-
-    #region Tap - Perform side effects
-
+    
     /// <summary>
     /// Performs an action with the success value if the result is successful.
     /// </summary>
@@ -116,9 +110,8 @@ public static class FunctionalExtensions
         ).ConfigureAwait(false);
     }
 
-    #endregion
 
-    #region Error handling
+
 
     /// <summary>
     /// Handles errors by applying the specified handler function if the result is an error.
@@ -150,10 +143,6 @@ public static class FunctionalExtensions
         var result = await resultTask.ConfigureAwait(false);
         return await result.SwitchAsync(_ => result.AsTask(), handler).ConfigureAwait(false);
     }
-
-    #endregion
-
-    #region Filter - Apply a predicate to the success value
 
    
     /// <summary>
@@ -199,11 +188,6 @@ public static class FunctionalExtensions
         ).ConfigureAwait(false);
     }
 
-    #endregion
-
-   
-
-    #region Conversion between Result and ValueTask
 
     /// <summary>
     /// Converts a <see cref="Task{Result{T}}"/> to a <see cref="ValueTask{Result{T}}"/>.
@@ -218,7 +202,10 @@ public static class FunctionalExtensions
     /// </summary>
     /// <param name="result"></param>
     /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
+    /// <returns>A completed value-task containing the original result.</returns>
+    ///  <remarks>
+    /// This method is useful for converting a synchronous result to a value-task-based API.
+    /// </remarks>
     public static ValueTask<Result<T>> AsValueTask<T>(this Result<T> result)=>ValueTask.FromResult(result);
     /// <summary>
     /// Converts a <see cref="Result{T}"/> to a completed <see cref="Task{Result{T}}"/>.
@@ -230,5 +217,5 @@ public static class FunctionalExtensions
     /// This method is useful for converting a synchronous result to a task-based API.
     /// </remarks>
     public static Task<Result<T>> AsTask<T>(this Result<T> result) => Task.FromResult(result);
-    #endregion
+
 }
