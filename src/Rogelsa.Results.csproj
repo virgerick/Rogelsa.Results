@@ -9,6 +9,8 @@
         <Title>Rogelsa.Results</Title>
         <Authors>Heriberto Alcantara</Authors>
         <Description>Rogelsa.Results es una librería ligera para .NET que facilita la implementación del patrón Result, ayudando a manejar errores, estados y respuestas de manera clara, consistente y sin excepciones en exceso.</Description>
+        <RepositoryUrl>https://github.com/virgerick/Rogelsa.Results.git</RepositoryUrl>
+        <PackageTags>Result</PackageTags>
     </PropertyGroup>
 
 </Project>
